@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  dribblePractice
-//
-//  Created by 성용강 on 03/03/2019.
-//  Copyright © 2019 성용강. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain
@@ -15,7 +7,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        window?.rootViewController = ViewController(collectionViewLayout: UICollectionViewFlowLayout())
+        
+        
         return true
     }
 
