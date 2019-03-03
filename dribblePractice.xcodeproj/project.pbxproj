@@ -20,6 +20,8 @@
 		AD9552A4222BCB98004DF2B4 /* HorizontolStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9552A3222BCB98004DF2B4 /* HorizontolStackView.swift */; };
 		AD9552A9222BD690004DF2B4 /* InfoFrontView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9552A8222BD690004DF2B4 /* InfoFrontView.swift */; };
 		AD9552AB222BD697004DF2B4 /* InfoBackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9552AA222BD697004DF2B4 /* InfoBackView.swift */; };
+		AD9552AD222BF849004DF2B4 /* UIColor++.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9552AC222BF849004DF2B4 /* UIColor++.swift */; };
+		AD9552AF222BF85E004DF2B4 /* UIImage++.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD9552AE222BF85E004DF2B4 /* UIImage++.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +40,8 @@
 		AD9552A3222BCB98004DF2B4 /* HorizontolStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HorizontolStackView.swift; sourceTree = "<group>"; };
 		AD9552A8222BD690004DF2B4 /* InfoFrontView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoFrontView.swift; sourceTree = "<group>"; };
 		AD9552AA222BD697004DF2B4 /* InfoBackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBackView.swift; sourceTree = "<group>"; };
+		AD9552AC222BF849004DF2B4 /* UIColor++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor++.swift"; sourceTree = "<group>"; };
+		AD9552AE222BF85E004DF2B4 /* UIImage++.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage++.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +102,8 @@
 			children = (
 				AD95529A222BC2A4004DF2B4 /* extension.swift */,
 				AD95529C222BC6CE004DF2B4 /* UIView+Layout.swift */,
+				AD9552AC222BF849004DF2B4 /* UIColor++.swift */,
+				AD9552AE222BF85E004DF2B4 /* UIImage++.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -192,12 +198,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				AD955289222BBE80004DF2B4 /* ViewController.swift in Sources */,
+				AD9552AF222BF85E004DF2B4 /* UIImage++.swift in Sources */,
 				AD9552A0222BCB09004DF2B4 /* CustomImageView.swift in Sources */,
 				AD955287222BBE80004DF2B4 /* AppDelegate.swift in Sources */,
 				AD955299222BC223004DF2B4 /* InfoCell.swift in Sources */,
 				AD95529B222BC2A4004DF2B4 /* extension.swift in Sources */,
 				AD9552A4222BCB98004DF2B4 /* HorizontolStackView.swift in Sources */,
 				AD95529D222BC6CE004DF2B4 /* UIView+Layout.swift in Sources */,
+				AD9552AD222BF849004DF2B4 /* UIColor++.swift in Sources */,
 				AD9552A2222BCB1B004DF2B4 /* VerticalStackView.swift in Sources */,
 				AD9552A9222BD690004DF2B4 /* InfoFrontView.swift in Sources */,
 				AD9552AB222BD697004DF2B4 /* InfoBackView.swift in Sources */,

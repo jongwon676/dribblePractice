@@ -23,8 +23,11 @@ class InfoCell: UICollectionViewCell{
         
         frontView.actionFlip = { [weak self] in
             guard let `self` = self else { return  }
+            
             UIView.transition(with: self, duration: self.animDuration, options: .transitionFlipFromBottom, animations: {
                 self.insertSubview(self.backView, aboveSubview: self.frontView)
+                self.frontView.alpha = 0
+                self.backView.alpha = 1
             }, completion: nil)
         }
         
@@ -32,6 +35,8 @@ class InfoCell: UICollectionViewCell{
             guard let `self` = self else { return  }
             UIView.transition(with: self, duration: self.animDuration, options: .transitionFlipFromTop, animations: {
                 self.insertSubview(self.frontView, aboveSubview: self.backView)
+                self.backView.alpha = 0
+                self.frontView.alpha = 1
             }, completion: nil)
         }
         
