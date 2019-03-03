@@ -6,6 +6,8 @@ class InfoBackView: SKView{
     
     var removeFromCollectionView: (()->())?
     
+    let chuckSize = 3
+    
     func getIconButton(image: UIImage) -> UIButton{
         let btn = UIButton(type: .system)
         btn.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
@@ -31,31 +33,31 @@ class InfoBackView: SKView{
     @objc func handleFlip(){
         actionFlip?()
     }
-  
+    
+    // ratain cycle 존재
+    
+    
+    
     @objc func deleteCells(){
         containerViewToScene()
-        
         [trashButton,folderButton, cancelButton, plusButton,menuButton].forEach { (btn) in
             addToScene(button: btn)
-        }
-        
-        buttonScene.backgroundColor = .clear
-        anim()
-        
-        [trashButton,folderButton, cancelButton, plusButton,menuButton].forEach { (btn) in
             btn.alpha = 0
         }
+        buttonScene.backgroundColor = .clear
+        
+        nodeAndActions.forEach { (node,action) in
+            node.run(SKAction.sequence(action))
+        }
+        removeFromCollectionView?()
+        
     }
-    
-    
-    
     let buttonScene = SKScene(size: .zero)
     var nodes = [SKSpriteNode]()
     
     var nodeAndActions = [(SKSpriteNode,[SKAction])]()
     
     
-   
     func setAnimationProperty(node: SKSpriteNode ,y: Int, x : Int){
         let yy = CGFloat(y)
         let xx: CGFloat = 10
@@ -83,37 +85,19 @@ class InfoBackView: SKView{
         nodeAndActions.append((node,actions))
     }
     
-    
-    
-    
-    func anim(){
-        
-        nodeAndActions.forEach { (node,action) in
-            node.run(SKAction.sequence(action), completion: {
-                
-            })
-        }
-        removeFromCollectionView?()
-        
-    }
-    
-    
     var stackOffsetX: CGFloat = 0
     var stackOffsetY:CGFloat = 0
     var overallStacView: HorizontolStackView?
     
-    
-    
     func containerViewToScene(){
-        print(self.frame.width)
-        print(self.frame.height)
-        for y in stride(from: 0, to: Int(self.frame.height), by: 2){
-            for x in stride(from: 0, to: Int(self.frame.width), by: 2){
+        
+        for y in stride(from: 0, to: Int(self.frame.height), by: chuckSize){
+            for x in stride(from: 0, to: Int(self.frame.width), by: chuckSize){
                 
                 
                 let color = buttonScene.backgroundColor
                 
-                let node = SKSpriteNode(color: color, size: CGSize(width: 2, height: 2))
+                let node = SKSpriteNode(color: color, size: CGSize(width: chuckSize, height: chuckSize))
                 
                 node.position = CGPoint(x: x, y: y)
                 
@@ -133,15 +117,13 @@ class InfoBackView: SKView{
         let maxY = image.size.height
         let black = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 1)
         
-        for y in stride(from: 0, to: Int(image.size.height), by: 2){
-            for x in stride(from: 0, to: Int(image.size.width), by: 2){
+        for y in stride(from: 0, to: Int(image.size.height), by: chuckSize){
+            for x in stride(from: 0, to: Int(image.size.width), by: chuckSize){
                 let color = pixels[y * Int(image.size.width) + x]
                 if color == black{
                     continue
                 }
-                
-                let node = SKSpriteNode(color: color, size: CGSize(width: 2, height: 2))
-                
+                let node = SKSpriteNode(color: color, size: CGSize(width: chuckSize, height: chuckSize))
                 let offsetX = button.frame.origin.x
                 let offsetY = button.frame.origin.y
                 
@@ -167,8 +149,6 @@ class InfoBackView: SKView{
         
         trashButton.addTarget(self, action: #selector(deleteCells), for: .touchUpInside)
         
-        
-        
         self.presentScene(buttonScene)
         
         
@@ -178,13 +158,12 @@ class InfoBackView: SKView{
         cancelButton,
         plusButton,
         menuButton
-        ], spacing: 5, distribution: .fillEqually)
+        ], distribution: .fillEqually)
+        
         guard let overallStacView = overallStacView else { return }
         addSubview(overallStacView)
         
         overallStacView.anchor(top: nil, leading: leadingAnchor, bottom: nil, trailing: trailingAnchor, padding: .init(top: 0, left: 10, bottom: 0, right: 0))
-        
-        overallStacView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         overallStacView.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
@@ -194,8 +173,10 @@ class InfoBackView: SKView{
         guard let stackView = overallStacView else { return }
         stackOffsetX = stackView.frame.minX + 10 // 10은 overallstackview left inset
         stackOffsetY = stackView.frame.minY
-        
     }
+    
+    
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError()
     }
