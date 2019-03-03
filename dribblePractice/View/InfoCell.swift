@@ -4,12 +4,16 @@ class InfoCell: UICollectionViewCell{
     
     let frontView = InfoFrontView()
     let backView = InfoBackView()
+    
     let animDuration: Double = 0.4
+    
+    
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
         
-        backgroundColor = .white
+        
+        backgroundColor = .clear
         layer.cornerRadius = 8
         layer.shadowOpacity = 0.1
         layer.shadowRadius = 1
@@ -38,14 +42,9 @@ class InfoCell: UICollectionViewCell{
                 self.backView.alpha = 0
                 self.frontView.alpha = 1
             }, completion: nil)
-        }
-        
-        
-        
+        }   
     }
-    func flipFrontToBack(){
-        
-    }
+
     required init?(coder aDecoder: NSCoder) {
         fatalError()
     }

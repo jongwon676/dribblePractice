@@ -6,8 +6,7 @@ class InfoFrontView: UIView{
     let timeLabel = UILabel(text: "03:29", font: UIFont.systemFont(ofSize: 12), textColor: #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1))
     let imageView = CustomImageView(frame: .zero)
     
-    
-    
+
     let menuButton: UIButton = {
         let btn = UIButton(type: .system)
         btn.setImage(#imageLiteral(resourceName: "icons8-menu-vertical-filled-50").withRenderingMode(.alwaysOriginal), for: .normal)
@@ -41,8 +40,6 @@ class InfoFrontView: UIView{
         overallStackView.alignment = .center
         addSubview(overallStackView)
         overallStackView.fillSuperview(padding: .init(top: 0, left: 20, bottom: 0, right: 20))
-        
-        
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError()

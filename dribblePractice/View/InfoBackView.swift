@@ -1,7 +1,10 @@
 import UIKit
 import SpriteKit
 
+
 class InfoBackView: SKView{
+    
+    var removeFromCollectionView: (()->())?
     
     func getIconButton(image: UIImage) -> UIButton{
         let btn = UIButton(type: .system)
@@ -14,11 +17,10 @@ class InfoBackView: SKView{
     lazy var cancelButton = getIconButton(image: #imageLiteral(resourceName: "icons8-delete-48"))
     lazy var plusButton = getIconButton(image: #imageLiteral(resourceName: "icons8-plus-48"))
     
-    
-  
+
     let menuButton: UIButton = {
         let btn = UIButton(type: .system)
-        btn.setImage(#imageLiteral(resourceName: "icons8-menu-vertical-filled-50").withRenderingMode(.alwaysOriginal), for: .normal)
+        btn.setImage(#imageLiteral(resourceName: "icons8-menu-vertical-40").withRenderingMode(.alwaysOriginal), for: .normal)
         btn.constrainWidth(constant: 20)
         btn.addTarget(self, action: #selector(handleFlip), for: .touchUpInside)
         return btn
@@ -26,48 +28,102 @@ class InfoBackView: SKView{
     
     var actionFlip: (()->())?
     
-    
-    
     @objc func handleFlip(){
         actionFlip?()
     }
   
     @objc func deleteCells(){
-        [trashButton,folderButton, cancelButton, plusButton].forEach { (btn) in
-            btn.alpha = 0
+        containerViewToScene()
+        
+        [trashButton,folderButton, cancelButton, plusButton,menuButton].forEach { (btn) in
             addToScene(button: btn)
         }
+        
+        buttonScene.backgroundColor = .clear
         anim()
+        
+        [trashButton,folderButton, cancelButton, plusButton,menuButton].forEach { (btn) in
+            btn.alpha = 0
+        }
     }
+    
+    
     
     let buttonScene = SKScene(size: .zero)
     var nodes = [SKSpriteNode]()
     
+    var nodeAndActions = [(SKSpriteNode,[SKAction])]()
+    
+    
+   
+    func setAnimationProperty(node: SKSpriteNode ,y: Int, x : Int){
+        let yy = CGFloat(y)
+        let xx: CGFloat = 10
+        let totalDuration: Double = 0.6
+        
+        let totlaDelay = 0.5
+        let percentY = Double(y) / Double(frame.height)
+        let delay = totlaDelay * (1.0 - percentY)
+        let duration = totalDuration - delay + Double(arc4random() % 10) / 100.0
+        
+        
+        let delayEvent = SKAction.wait(forDuration: delay )
+        
+        let moveAction = SKAction.moveBy(x: xx, y: yy, duration: duration)
+        moveAction.timingMode = .easeIn
+        
+        let actions = [
+            delayEvent,
+            moveAction,
+            SKAction.customAction(withDuration: duration, actionBlock: { node, duration in
+                node.removeFromParent()
+            })
+        ]
+
+        nodeAndActions.append((node,actions))
+    }
+    
+    
     
     
     func anim(){
-        nodes.enumerated().forEach { (idx,node) in
-            let yy = max(CGFloat(Int(arc4random()) % 30),10)
-            let xx:CGFloat = 50
-            let duration: Double = 1.0
-            let randDelay = Double(Int(arc4random()) % 10000) / Double(40000)
-            let delay = SKAction.wait(forDuration: randDelay )
-            let actions = [
-                delay,
-                SKAction.moveBy(x: xx, y: yy, duration: duration),
+        
+        nodeAndActions.forEach { (node,action) in
+            node.run(SKAction.sequence(action), completion: {
                 
-                SKAction.customAction(withDuration: duration, actionBlock: { node, duration in
-                    node.removeFromParent()
-                })
-            ]
-            node.run(SKAction.sequence(actions))
+            })
         }
+        removeFromCollectionView?()
+        
     }
     
     
     var stackOffsetX: CGFloat = 0
     var stackOffsetY:CGFloat = 0
     var overallStacView: HorizontolStackView?
+    
+    
+    
+    func containerViewToScene(){
+        print(self.frame.width)
+        print(self.frame.height)
+        for y in stride(from: 0, to: Int(self.frame.height), by: 2){
+            for x in stride(from: 0, to: Int(self.frame.width), by: 2){
+                
+                
+                let color = buttonScene.backgroundColor
+                
+                let node = SKSpriteNode(color: color, size: CGSize(width: 2, height: 2))
+                
+                node.position = CGPoint(x: x, y: y)
+                
+                setAnimationProperty(node: node, y: Int(frame.height) - y, x: x)
+                nodes.append(node)
+                buttonScene.addChild(node)
+            }
+        }
+       
+    }
     
     func addToScene(button: UIButton){
         let img = button.imageView?.image
@@ -76,21 +132,22 @@ class InfoBackView: SKView{
         
         let maxY = image.size.height
         let black = UIColor(displayP3Red: 0, green: 0, blue: 0, alpha: 1)
-        for y in 0..<Int(image.size.height) {
-            for x in 0..<Int(image.size.width){
-                var color = pixels[y * Int(image.size.width) + x]
+        
+        for y in stride(from: 0, to: Int(image.size.height), by: 2){
+            for x in stride(from: 0, to: Int(image.size.width), by: 2){
+                let color = pixels[y * Int(image.size.width) + x]
                 if color == black{
-                    color = buttonScene.backgroundColor
+                    continue
                 }
                 
-                let node = SKSpriteNode(color: color, size: CGSize(width: 1, height: 1))
+                let node = SKSpriteNode(color: color, size: CGSize(width: 2, height: 2))
                 
                 let offsetX = button.frame.origin.x
                 let offsetY = button.frame.origin.y
                 
                 let newX = offsetX + stackOffsetX + CGFloat(x)
                 let newY = ( maxY - CGFloat(y) )  + offsetY + stackOffsetY
-                
+                self.setAnimationProperty(node: node, y: Int(newY), x: Int(newX))
                 node.position = CGPoint(x: newX, y: newY)
                 nodes.append(node)
                 buttonScene.addChild(node)
@@ -104,11 +161,13 @@ class InfoBackView: SKView{
         
         
         backgroundColor = .clear
-        buttonScene.size = frame.size
         buttonScene.backgroundColor = .white
+        
+        buttonScene.size = frame.size
+        
         trashButton.addTarget(self, action: #selector(deleteCells), for: .touchUpInside)
         
-        buttonScene.backgroundColor = .white
+        
         
         self.presentScene(buttonScene)
         
@@ -141,3 +200,6 @@ class InfoBackView: SKView{
         fatalError()
     }
 }
+
+
+
